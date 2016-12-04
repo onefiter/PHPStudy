@@ -17,9 +17,18 @@ if ($result === false) {
 }
 else {
 	echo "执行成功".$result;
+	echo "<br/>";
+	while ($re = mysql_fetch_array($result)) {
+			echo $re['f1']."<br/>";
+			echo $re['f2']."<br/>";
+			echo $re['f3']."<br/>";
+	}
 }
 echo "<hr>";
+
+
 // mysqli
+/*
 $mysqli = new mysqli("localhost", "root", "root", "php");
 $result = $mysqli->query("SELECT * FROM tab_int2");
 
@@ -30,3 +39,4 @@ $pdo = new PDO('mysql:host=localhost;dbname=php', 'root', 'root');
 $statement = $pdo->query("SELECT * FROM tab_int2");
 $row = $statement->fetch(PDO::FETCH_ASSOC);
 echo htmlentities($row['f1']);
+*/
