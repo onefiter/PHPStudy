@@ -13,19 +13,20 @@ class MySQLDB
 
   function __construct($config)
   {
+
     //先将这些基本的连接信息，保存起来！
     $this->host = !empty($config['host']) ? $config['host'] : 'localhost';
     $this->port = !empty($config['port']) ? $config['port'] : '3306';
     $this->user = !empty($config['user']) ? $config['user'] : 'root';
-    $this->pass = !empty($config['pass']) ? $config['pass'] : '';
+    $this->pass = !empty($config['pass']) ? $config['pass'] : 'root';
     $this->charset = !empty($config['charset']) ? $config['charset'] : 'utf8';
-    $this->charset = !empty($config['dbname']) ? $config['dbname'] : 'php';
+    $this->dbname = !empty($config['dbname']) ? $config['dbname'] : 'php';
     //连接
     $this->link = mysql_connect("{$this->host}:{$this->port}","{$this->user}","{$this->pass}") or die('数据库连接失败');
     //设定编码
     $this->setCharset($this->charset);
     //选择要使用的数据库
-    $this->setCharset($this->dbname);
+    $this->selectDB($this->dbname);
   }
 
   //可以设定要使用的连接编码
@@ -36,7 +37,8 @@ class MySQLDB
   //可以设定要使用的数据库
 	function selectDB($dbname)
   {
-		mysql_query("use  $dbname");
+
+		mysql_query("use $dbname");
 	}
   //可关闭连接
 	function closeDB()
@@ -46,7 +48,7 @@ class MySQLDB
   //执行增删改查语句
   function exec($sql)
   {
-    $result = mysql_connect($mysql);
+    $result = mysql_query($sql);
     //连接失败
     if ($result === false)
     {
@@ -56,7 +58,7 @@ class MySQLDB
       echo "<br />错误语句：" . $sql;
       die();
     }
-    retrun true;
+    return true;
   }
   /**
    * 执行一条语句返回一行数据，返回的是一维数组
