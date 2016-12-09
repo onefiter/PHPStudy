@@ -84,6 +84,24 @@ class MySQLDB
   //这个方法为了执行一条返回多行数据的语句，它可以返回二维数组
 	function GetRows($sql)
   {
+      $result = mysql_query($sql);
+      if ($result === false)
+      {
+        //语句执行失败，则需要处理这种失败情况：
+  			echo "<p>sql语句执行失败，请参考如下信息：";
+  			echo "<br />错误代号：" . mysql_errno();	//获取错误代号
+  			echo "<br />错误信息：" . mysql_error();	//获取错误提示内部
+  			echo "<br />错误语句：" . $sql;
+  			die();
+      }
+      $arr = array();
+      while ($rec = mysql_fetch_assoc($result))
+      {
+        $arr[] = $rec;
+      }
+      //提前释放资源（销毁结果集），否则需要等到页面结束才自动销毁
+      mysql_free_result( $result );
+      return $arr;
 
 	}
 
