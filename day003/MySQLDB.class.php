@@ -11,6 +11,17 @@ class MySQLDB
   private $charset;//字符集
   private $dbname; //数据库名
 
+  private static $instance = null;
+  static function GetInstance($config)
+  {
+    if(!(self::$instance instanceof self))
+    {
+      self::$instance = new self($config);
+    }
+    return self::$instance;
+  }
+  private function __clone(){}
+
   function __construct($config)
   {
 
@@ -48,16 +59,7 @@ class MySQLDB
   //执行增删改查语句
   function exec($sql)
   {
-    $result = mysql_query($sql);
-    //连接失败
-    if ($result === false)
-    {
-      echo "<p>sql语句执行失败，请参考如下信息：";
-      echo "<br />错误代号：" . mysql_errno();//错误代码号
-      echo "<br />错误信息：" . mysql_error();//获取错误提示
-      echo "<br />错误语句：" . $sql;
-      die();
-    }
+    $result = $this->query($sql);
     return true;
   }
   /**
@@ -66,16 +68,7 @@ class MySQLDB
    */
   function GetOneRow($sql)
   {
-    $result = mysql_query($sql);
-    if ( $result === false)
-    {
-			//语句执行失败，则需要处理这种失败情况：
-			echo "<p>sql语句执行失败，请参考如下信息：";
-			echo "<br />错误代号：" . mysql_errno();	//获取错误代号
-			echo "<br />错误信息：" . mysql_error();	//获取错误提示内部
-			echo "<br />错误语句：" . $sql;
-			die;
-    }
+    $result = $this->query($sql);
     //如果没有出粗,则开始处理数据，已返回数据
     $rec = mysql_fetch_assoc($result);
     return $rec;
@@ -84,16 +77,7 @@ class MySQLDB
   //这个方法为了执行一条返回多行数据的语句，它可以返回二维数组
 	function GetRows($sql)
   {
-      $result = mysql_query($sql);
-      if ($result === false)
-      {
-        //语句执行失败，则需要处理这种失败情况：
-  			echo "<p>sql语句执行失败，请参考如下信息：";
-  			echo "<br />错误代号：" . mysql_errno();	//获取错误代号
-  			echo "<br />错误信息：" . mysql_error();	//获取错误提示内部
-  			echo "<br />错误语句：" . $sql;
-  			die();
-      }
+      $result = $this->query($sql);
       $arr = array();
       while ($rec = mysql_fetch_assoc($result))
       {
@@ -105,10 +89,36 @@ class MySQLDB
 
 	}
 
-	//这个方法为了执行一条返回一个数据的语句，它可以返回一个直接值
+	/**
+	 * 返回一条数据
+	 * @param SQL语句
+	 */
 	function GetOneData($sql)
   {
-
+    $result = $this->query($sql);
+    $rec = mysql_fetch_row($result);
+    $data = $rec[0];
+    mysql_free_result($result);
+    return $data;
 	}
+
+  /**
+   * 执行sql语句，并进行错误处理或返回执行结果
+   * @param  string $sql SQL语句
+   * @return 返回结果
+   */
+  private function query($sql)
+  {
+    $result = mysql_query($sql,$this->link);
+    if($result === false)
+    {
+      echo "<p>sql语句执行失败，请参考如下信息：";
+			echo "<br />错误代号：" . mysql_errno();	//获取错误代号
+			echo "<br />错误信息：" . mysql_error();	//获取错误提示内部
+			echo "<br />错误语句：" . $sql;
+			die();
+    }
+    return $result;	//返回的是“执行的结果”
+  }
 
 }
