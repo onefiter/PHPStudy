@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>mvc_demo2</title>
+    <style type="text/css">
+      .t1{color: red;}
+      .t2{background: #ccc;}
+    </style>
+  </head>
+  <body>
+    <table border="1">
+      <?php
+        foreach($data1 as $key=>$v){
+      ?>
+      <tr>
+        <td><?php echo $v['user_name']; ?></td>
+        <td class="t1"><?php echo $v['real_name']; ?></td>
+        <td><?php echo $v['birthday']; ?></td>
+        <td class='t2'><?php echo $v['QQ']; ?></td>
+        <td><?php echo $v['reg_time']; ?></td>
+        <td>
+          <a href="?act=del&id=<?php echo $v['user_id']  ?>" onclick='return queren()'>删除</a>
+          <a href='?act=detail&id=<?php echo $rec['user_id']; ?>' >详细</a>
+        </td>
+      </tr>
+      <?php } ?>
+    </table>
+    <br>
+    当前用户总数：<?php echo $data2;?>
+  </body>
+  <script type="text/javascript">
+  function queren()
+  {
+    return window.confirm("你真的要删除吗？");
+  }
+  </script>
+</html>
