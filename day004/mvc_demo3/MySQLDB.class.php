@@ -33,7 +33,7 @@ class MySQLDB{
 	//实现单例第4步：私有化这个克隆的魔术方法
 	private function __clone(){}
 
-	//实现单例第1步：
+	//实现单例第1步：__construct
 	private function __construct($config){
 		//先将这些基本的连接信息，保存起来！
 		$this->host = !empty($config['host']) ? $config['host'] : "localhost";	//考虑空值情况，使用默认值代替
