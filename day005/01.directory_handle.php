@@ -10,3 +10,10 @@ if (!is_dir($path))
   var_dump($re);
 
 }
+
+if(is_dir($path))
+{
+  $re = rmdir($path);
+  echo "rmdir:";
+  var_dump($re);
+}
