@@ -8,7 +8,7 @@ $path = "./path/where/nice";
  * bool mkdir ( string $pathname [, int $mode = 0777 [, bool $recursive = false [, resource $context ]]] )
  * @param $mode  读写
  * @param $recursive 是否递归创建
-* @param $recursive 是否递归创建
+ * @param $context stream
  */
 if (!is_dir($path))
 {
